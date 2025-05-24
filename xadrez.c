@@ -1,74 +1,41 @@
 #include <stdio.h>
 
 #define TAMANHO_TABULEIRO 8
-#define DIVISORIA "--------------------------------------"
 
-// Recursividade para movimentação da Torre
-void moverTorreRecursivo(int x, int y, int i) {
-    if (i >= TAMANHO_TABULEIRO) return;
-
-    printf("Direita: (%d, %d)\n", x, y + i);
-    printf("Esquerda: (%d, %d)\n", x, y - i);
-    printf("Baixo: (%d, %d)\n", x + i, y);
-    printf("Cima: (%d, %d)\n", x - i, y);
-
-    moverTorreRecursivo(x, y, i + 1);
+// Função para imprimir os índices das colunas
+void imprimirIndicesColunas() {
+    printf("   ");
+    for (char letra = 'A'; letra < 'A' + TAMANHO_TABULEIRO; letra++) {
+        printf(" %c  ", letra);
+    }
+    printf("\n");
 }
 
-// Recursividade otimizada para o Bispo
-void moverBispoRecursivo(int x, int y, int i) {
-    if (i >= TAMANHO_TABULEIRO) return;
-
-    printf("Cima, Direita: (%d, %d)\n", x + i, y + i);
-    printf("Baixo, Esquerda: (%d, %d)\n", x - i, y - i);
-    printf("Cima, Esquerda: (%d, %d)\n", x + i, y - i);
-    printf("Baixo, Direita: (%d, %d)\n", x - i, y + i);
-
-    moverBispoRecursivo(x, y, i + 1);
-}
-
-// Recursividade para movimentação da Rainha
-void moverRainhaRecursivo(int x, int y, int i) {
-    if (i >= TAMANHO_TABULEIRO) return;
-
-    moverTorreRecursivo(x, y, i);
-    moverBispoRecursivo(x, y, i);
-}
-
-// Movimentação do Cavalo
-void moverCavalo(int x, int y) {
-    printf("%s\n", DIVISORIA);
-    printf("Movimentos do Cavalo a partir de (%d, %d):\n", x, y);
-    
-    int movimentos[8][2] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
-    
-    for (int i = 0; i < 8; i++) {
-        int novoX = x + movimentos[i][0];
-        int novoY = y + movimentos[i][1];
-        if (novoX >= 0 && novoX < TAMANHO_TABULEIRO && novoY >= 0 && novoY < TAMANHO_TABULEIRO) {
-            printf("L em (%d, %d)\n", novoX, novoY);
+// Função para imprimir uma linha do tabuleiro com índice de linha
+void imprimirLinha(int linha) {
+    printf("%2d ", linha + 1);  // Índice da linha
+    for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+        if ((linha + j) % 2 == 0) {
+            printf("| | ");
+        } else {
+            printf("|X| ");
         }
+    }
+    printf("\n");
+}
+
+// Função para imprimir o tabuleiro completo
+void imprimirTabuleiro() {
+    imprimirIndicesColunas();  // Imprime os índices das colunas
+
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        imprimirLinha(i);  // Imprime cada linha do tabuleiro
     }
 }
 
 int main() {
-    int posX = 4, posY = 4;
-
-    printf("%s\n", DIVISORIA);
-    printf("Movimentos da Torre:\n");
-    moverTorreRecursivo(posX, posY, 1);
-
-    printf("%s\n", DIVISORIA);
-    printf("Movimentos do Bispo:\n");
-    moverBispoRecursivo(posX, posY, 1);
-
-    printf("%s\n", DIVISORIA);
-    printf("Movimentos da Rainha:\n");
-    moverRainhaRecursivo(posX, posY, 1);
-
-    moverCavalo(posX, posY);
-
-    printf("%s\n", DIVISORIA);
+    printf("Tabuleiro de Xadrez Virtual:\n\n");
+    imprimirTabuleiro();
     
     return 0;
 }
