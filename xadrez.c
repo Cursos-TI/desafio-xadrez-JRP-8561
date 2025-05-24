@@ -30,57 +30,69 @@
 #include <stdio.h>
 
 #define TAMANHO_TABULEIRO 8
+#define DIVISORIA "--------------------------------------"
 
-// Movimentação da Torre usando um "for"
+
+// Movimentação completa da Torre (horizontal e vertical)
 void moverTorre(int x, int y) {
+    printf("%s\n", DIVISORIA);
     printf("Movimentos da Torre a partir de (%d, %d):\n", x, y);
-    for (int i = 1; i < TAMANHO_TABULEIRO - y; i++) {
-        printf("Direita: (%d, %d)\n", x, y + i);
+    for (int i = 1; i < TAMANHO_TABULEIRO; i++) {
+        if (y + i < TAMANHO_TABULEIRO) printf("Direita: (%d, %d)\n", x, y + i);
+        if (y - i >= 0) printf("Esquerda: (%d, %d)\n", x, y - i);
+        if (x + i < TAMANHO_TABULEIRO) printf("Baixo: (%d, %d)\n", x + i, y);
+        if (x - i >= 0) printf("Cima: (%d, %d)\n", x - i, y);
     }
 }
 
-// Movimentação do Bispo com recursão
-void moverBispo(int x, int y, int i) {
-    if (i >= TAMANHO_TABULEIRO) return;
-
-    if (x + i < TAMANHO_TABULEIRO && y + i < TAMANHO_TABULEIRO) printf("Cima, Direita: (%d, %d)\n", x + i, y + i);
-    if (x - i >= 0 && y - i >= 0) printf("Baixo, Esquerda: (%d, %d)\n", x - i, y - i);
-    if (x + i < TAMANHO_TABULEIRO && y - i >= 0) printf("Cima, Esquerda: (%d, %d)\n", x + i, y - i);
-    if (x - i >= 0 && y + i < TAMANHO_TABULEIRO) printf("Baixo, Direita: (%d, %d)\n", x - i, y + i);
-
-    moverBispo(x, y, i + 1);
-}
-
-// Movimentação da Rainha com "while"
+// Movimentação completa da Rainha (horizontal, vertical e diagonal)
 void moverRainha(int x, int y) {
+    printf("%s\n", DIVISORIA);
     printf("Movimentos da Rainha a partir de (%d, %d):\n", x, y);
-    int i = 1;
-    while (y - i >= 0) {
-        printf("Esquerda: (%d, %d)\n", x, y - i);
-        i++;
+    for (int i = 1; i < TAMANHO_TABULEIRO; i++) {
+        if (y + i < TAMANHO_TABULEIRO) printf("Direita: (%d, %d)\n", x, y + i);
+        if (y - i >= 0) printf("Esquerda: (%d, %d)\n", x, y - i);
+        if (x + i < TAMANHO_TABULEIRO) printf("Baixo: (%d, %d)\n", x + i, y);
+        if (x - i >= 0) printf("Cima: (%d, %d)\n", x - i, y);
+
+        if (x + i < TAMANHO_TABULEIRO && y + i < TAMANHO_TABULEIRO) printf("Cima, Direita: (%d, %d)\n", x + i, y + i);
+        if (x - i >= 0 && y - i >= 0) printf("Baixo, Esquerda: (%d, %d)\n", x - i, y - i);
+        if (x + i < TAMANHO_TABULEIRO && y - i >= 0) printf("Cima, Esquerda: (%d, %d)\n", x + i, y - i);
+        if (x - i >= 0 && y + i < TAMANHO_TABULEIRO) printf("Baixo, Direita: (%d, %d)\n", x - i, y + i);
     }
 }
 
-// Movimentação do Cavalo com loops aninhados
+// Movimentação otimizada do Bispo (todas as diagonais)
+void moverBispo(int x, int y) {
+    printf("%s\n", DIVISORIA);
+    printf("Movimentos do Bispo a partir de (%d, %d):\n", x, y);
+    for (int i = 1; i < TAMANHO_TABULEIRO; i++) {
+        if (x + i < TAMANHO_TABULEIRO && y + i < TAMANHO_TABULEIRO) printf("Cima, Direita: (%d, %d)\n", x + i, y + i);
+        if (x - i >= 0 && y - i >= 0) printf("Baixo, Esquerda: (%d, %d)\n", x - i, y - i);
+        if (x + i < TAMANHO_TABULEIRO && y - i >= 0) printf("Cima, Esquerda: (%d, %d)\n", x + i, y - i);
+        if (x - i >= 0 && y + i < TAMANHO_TABULEIRO) printf("Baixo, Direita: (%d, %d)\n", x - i, y + i);
+    }
+}
+
+// Movimentação do Cavalo com validação de posições
 void moverCavalo(int x, int y) {
+    printf("%s\n", DIVISORIA);
     printf("Movimentos do Cavalo a partir de (%d, %d):\n", x, y);
     int movimentos[][2] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
 
     for (int i = 0; i < 8; i++) {
         int novoX = x + movimentos[i][0];
         int novoY = y + movimentos[i][1];
-
-        // Usando continue e break para validar posições no tabuleiro
-        if (novoX < 0 || novoX >= TAMANHO_TABULEIRO || novoY < 0 || novoY >= TAMANHO_TABULEIRO) continue;
-        printf("L em (%d, %d)\n", novoX, novoY);
+        if (novoX >= 0 && novoX < TAMANHO_TABULEIRO && novoY >= 0 && novoY < TAMANHO_TABULEIRO) {
+            printf("L em (%d, %d)\n", novoX, novoY);
+        }
     }
 }
 
 int main() {
     int posX = 4, posY = 4;
-
     moverTorre(posX, posY);
-    moverBispo(posX, posY, 1);
+    moverBispo(posX, posY);
     moverRainha(posX, posY);
     moverCavalo(posX, posY);
 
