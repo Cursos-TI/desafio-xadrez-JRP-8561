@@ -35,7 +35,7 @@ void moverRainhaRecursivo(int x, int y, int i) {
     moverBispoRecursivo(x, y, i);
 }
 
-// Movimentação correta do Cavalo
+// Movimentação do Cavalo
 void moverCavalo(int x, int y) {
     printf("%s\n", DIVISORIA);
     printf("Movimentos do Cavalo a partir de (%d, %d):\n", x, y);
